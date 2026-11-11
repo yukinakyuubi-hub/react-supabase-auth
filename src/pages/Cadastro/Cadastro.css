@@ -1,0 +1,35 @@
+import { Routes, Route, Link } from 'react-router';
+import Cadastro from './pages/Cadastro';
+import Cadastro from './pages/Cadastro';
+
+function Home() {
+  return (
+    <main>
+      <h1>Bem-vindo ao nosso sistema!</h1>
+      <p>Consulte os produtos cadastrados no banco de dados.</p>
+      <Link to="/registros">Ver produtos cadastrados</Link>
+    </main>
+  );
+}
+
+function App() {
+  return (
+    <>
+      <nav>
+        <Link to="/">Início</Link>
+        {' | '}
+        <Link to="/registros">Produtos</Link>
+        {' | '}
+        <Link to="/registro">Criar conta</Link>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/registros" element={<Registros />} />
+        <Route path="/registro" element={<Registro />} />
+      </Routes>
+    </>
+  );
+}
+
+export default App;
