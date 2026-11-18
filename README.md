@@ -1,8 +1,12 @@
-# Sistema de Autenticação com React e Supabase
+# Sistema de Autenticação e Validação de Formulários com React e Supabase
 
 ## 1. Sobre o projeto
 
-Este projeto foi desenvolvido como atividade prática para demonstrar a integração entre React, React Router e Supabase, utilizando autenticação de usuários e controle de acesso às páginas.
+Este projeto foi desenvolvido como atividade prática da disciplina de Frameworks Front-end. O objetivo é demonstrar a integração entre React, React Router e Supabase, utilizando autenticação de usuários, controle de acesso às páginas, validação de formulários e segurança dos dados.
+
+Na primeira etapa, foram desenvolvidos recursos de cadastro, login, gerenciamento de sessão e proteção de rotas.
+
+Na atividade de validação de formulários, o projeto foi aprimorado com React Hook Form e Zod, permitindo validar os dados antes do envio ao Supabase e apresentar mensagens de erro mais claras para o usuário.
 
 ## 2. Tecnologias utilizadas
 
@@ -10,6 +14,10 @@ Este projeto foi desenvolvido como atividade prática para demonstrar a integra�
 - Vite
 - React Router
 - Supabase
+- Supabase Auth
+- React Hook Form
+- Zod
+- @hookform/resolvers
 - JavaScript
 - Context API
 - CSS
@@ -25,32 +33,87 @@ Este projeto foi desenvolvido como atividade prática para demonstrar a integra�
 - Página de perfil.
 - Consulta de produtos cadastrados.
 - Visualização dos detalhes dos produtos.
+- Cadastro de novos registros.
+- Validação de formulários com React Hook Form.
+- Validação de dados com Zod.
+- Mensagens de erro em português.
+- Tratamento de erros retornados pelo Supabase.
+- Desativação do botão durante o envio dos formulários.
 - Página 404.
 - Controle de acesso com Row Level Security (RLS).
 
-## 4. Segurança
+## 4. Validação de formulários
 
-A autenticação é realizada pelo Supabase Auth.
+Para melhorar a validação dos dados, foram utilizadas duas ferramentas principais:
 
-A Context API mantém as informações do usuário autenticado.
+**React Hook Form:** responsável por gerenciar os formulários, controlar o envio dos dados e acompanhar os erros de preenchimento.
 
-As rotas protegidas impedem que usuários não autenticados acessem páginas privadas.
+**Zod:** responsável por definir as regras de validação dos campos.
 
-O RLS está habilitado na tabela Produtos, permitindo a consulta por usuários autenticados.
+A integração entre as duas ferramentas é realizada por meio do `zodResolver`.
 
-## 5. Rotas do sistema
+### Validação do cadastro
 
-| Rota             | Descrição           | Acesso    |
-| ---------------- | ------------------- | --------- |
-| `/`              | Página inicial      | Público   |
-| `/login`         | Login               | Público   |
-| `/registro`      | Cadastro            | Público   |
-| `/dashboard`     | Painel do usuário   | Protegido |
-| `/registros`     | Lista de produtos   | Protegido |
+O formulário de cadastro possui as seguintes regras:
+
+- Nome completo obrigatório.
+- E-mail em formato válido.
+- Senha com no mínimo 8 caracteres.
+- Confirmação de senha igual à senha informada.
+
+### Validação do login
+
+O formulário de login verifica:
+
+- E-mail em formato válido.
+- Senha obrigatória.
+
+### Tratamento de erros
+
+Os erros são apresentados de maneira amigável, evitando exibir mensagens técnicas diretamente ao usuário.
+
+Também são tratados erros retornados pelo Supabase, como credenciais inválidas e e-mail já cadastrado.
+
+## 5. Cadastro de novos registros
+
+Foi adicionada a rota protegida `/registros/novo`, permitindo cadastrar novos registros na tabela `Produtos` do Supabase.
+
+O formulário utiliza validação com Zod antes de enviar os dados ao banco.
+
+Durante o envio, o botão fica desabilitado para evitar múltiplos envios. Após o cadastro, o sistema apresenta uma mensagem de sucesso ou erro e realiza o redirecionamento para a listagem de registros quando o cadastro é concluído.
+
+## 6. Segurança do banco de dados
+
+A segurança dos dados é reforçada por meio de validações no banco de dados e políticas de Row Level Security (RLS).
+
+### Constraint CHECK
+
+Foi utilizada uma restrição `CHECK` na tabela `Produtos` para limitar o tamanho do nome do registro.
+
+Essa validação funciona diretamente no banco de dados, impedindo que dados fora das regras estabelecidas sejam inseridos mesmo quando não passam pelo formulário da aplicação.
+
+### Política RLS
+
+A tabela utiliza Row Level Security para controlar as operações realizadas pelos usuários autenticados.
+
+A política de inserção utiliza `WITH CHECK` para verificar se o registro está associado ao usuário autenticado, por meio da identificação retornada por `auth.uid()`.
+
+Dessa forma, a segurança não depende apenas das validações realizadas no React.
+
+## 7. Rotas do sistema
+
+| Rota | Descrição | Acesso |
+|---|---|---|
+| `/` | Página inicial | Público |
+| `/login` | Login | Público |
+| `/registro` | Cadastro de usuários | Público |
+| `/dashboard` | Painel do usuário | Protegido |
+| `/registros` | Lista de produtos | Protegido |
+| `/registros/novo` | Cadastro de novo registro | Protegido |
 | `/registros/:id` | Detalhes do produto | Protegido |
-| `/perfil`        | Perfil do usuário   | Protegido |
+| `/perfil` | Perfil do usuário | Protegido |
 
-## 6. Configuração do Supabase
+## 8. Configuração do Supabase
 
 Para conectar a aplicação ao Supabase, é necessário criar um arquivo chamado `.env` na pasta principal do projeto.
 
@@ -63,70 +126,100 @@ VITE_SUPABASE_ANON_KEY=sua_chave_publica_do_supabase
 
 Substitua os valores pelos dados do seu projeto Supabase.
 
-**Importante:** o arquivo `.env` não deve ser enviado ao GitHub. Ele está incluído no `.gitignore` para evitar a exposição das configurações.
+**Importante:** o arquivo `.env` não deve ser enviado ao GitHub. Ele deve permanecer incluído no `.gitignore` para evitar a exposição das configurações.
 
-Não compartilhe chaves privadas, senhas ou chaves secretas de administração.
+Não compartilhe senhas, chaves privadas ou chaves secretas de administração.
 
-## 7. Como executar o projeto
+## 9. Como executar o projeto
 
-1. Instale as dependências:
+1. Clone o repositório:
+
+```bash
+git clone https://github.com/yukinakyuubi-hub/react-supabase-auth.git
+```
+
+2. Acesse a pasta do projeto:
+
+```bash
+cd react-supabase-auth
+```
+
+3. Instale as dependências:
 
 ```bash
 npm install
 ```
 
-2. Configure as variáveis de ambiente no arquivo `.env`.
+4. Configure as variáveis de ambiente no arquivo `.env`.
 
-3. Execute a aplicação:
+5. Execute a aplicação:
 
 ```bash
 npm run dev
 ```
 
-4. Acesse o endereço disponibilizado pelo Vite.
+6. Acesse o endereço disponibilizado pelo Vite.
 
-## 8. Considerações sobre a segurança
+## 10. Teste da validação diretamente no banco de dados — Etapa 5
 
-A aplicação utiliza o Supabase Auth para autenticar os usuários e o React Router para controlar o acesso às páginas privadas.
+Nesta etapa, foi realizado um teste para verificar se as regras de segurança do banco de dados continuam funcionando mesmo quando uma tentativa de inserção é feita sem utilizar o formulário da aplicação.
 
-Além disso, a tabela Produtos possui Row Level Security (RLS) habilitado, permitindo consultas por usuários autenticados conforme a política configurada no Supabase.
+O objetivo foi verificar se a constraint `CHECK` e a política RLS impedem a inserção de dados inválidos ou não autorizados.
 
-## 9. Perguntas e respostas
+**Resultado do teste:**
 
-**1. Qual é a responsabilidade do Supabase Auth dentro da aplicação?**
+[REGISTRAR AQUI O RESULTADO REAL OBTIDO NO SUPABASE: se a inserção foi bloqueada, qual regra impediu a operação e qual mensagem ou erro foi apresentado.]
 
-O Supabase Auth é responsável por gerenciar a autenticação dos usuários. Ele permite criar contas, realizar login, encerrar sessões e verificar a identidade de quem está acessando o sistema.
+Esse teste demonstra a importância de realizar validações também no banco de dados, pois a validação no front-end, sozinha, não garante a segurança das informações.
 
-**2. Por que utilizamos a Context API para compartilhar as informações do usuário autenticado?**
+## 11. Perguntas e respostas
 
-Utilizamos a Context API para compartilhar as informações do usuário entre diferentes componentes da aplicação. Assim, não precisamos buscar os dados de autenticação novamente em cada página.
+**1. Qual a vantagem de utilizar React Hook Form em vez de controlar cada campo com useState?**
 
-**3. Qual é a diferença entre utilizar `useState` diretamente em cada componente e utilizar um contexto global de autenticação?**
+O React Hook Form facilita o gerenciamento dos formulários, reduz a necessidade de criar vários estados e ajuda a controlar validações, erros e envio dos dados de maneira organizada.
 
-O `useState` controla informações dentro de um componente específico. Já o contexto global permite compartilhar informações, como os dados do usuário autenticado, entre vários componentes da aplicação.
+**2. Qual é o papel do Zod e do zodResolver na validação?**
 
-**4. O que acontece quando um usuário tenta acessar uma rota protegida sem estar autenticado?**
+O Zod define as regras que os campos precisam seguir. Já o zodResolver conecta essas regras ao React Hook Form, permitindo que as validações sejam executadas automaticamente.
 
-O componente ProtectedRoute verifica se existe um usuário autenticado. Caso não exista, o usuário é redirecionado para a página de login, sem conseguir acessar o conteúdo privado.
+**3. Por que a validação no front-end não é suficiente para garantir a segurança dos dados?**
 
-**5. Qual é a função do método `onAuthStateChange()`?**
+Porque os dados podem ser enviados diretamente ao banco, sem passar pelo formulário. Por isso, também é necessário utilizar regras e restrições no próprio banco de dados.
 
-Esse método acompanha as alterações no estado de autenticação do usuário, como login e logout. Quando ocorre uma mudança, ele permite atualizar as informações armazenadas no contexto de autenticação.
+**4. Qual é a diferença entre um erro de validação do formulário e um erro retornado pelo Supabase?**
 
-**6. Por que a proteção de rotas com React Router não é suficiente para garantir a segurança dos dados?**
+O erro de validação acontece quando o usuário preenche algum campo de maneira incorreta, como informar um e-mail inválido. Já o erro do Supabase acontece durante uma operação com o serviço, como uma tentativa de login com credenciais inválidas ou uma inserção não autorizada.
 
-Porque a proteção do React Router controla apenas o acesso às páginas da aplicação. Para proteger os dados armazenados no banco, também precisamos utilizar políticas de segurança RLS no Supabase.
+**5. Por que o sistema deve apresentar uma mensagem genérica quando as credenciais do login são inválidas?**
 
-**7. Qual é a diferença entre autenticação e autorização?**
+Para evitar revelar informações sobre a existência de contas cadastradas. Assim, o sistema não facilita a descoberta de e-mails registrados por pessoas não autorizadas.
 
-Autenticação é o processo de verificar quem é o usuário, por exemplo, por meio de e-mail e senha. Autorização é a definição do que esse usuário pode acessar ou realizar dentro do sistema.
+**6. Qual é a função das constraints e do RLS com WITH CHECK no banco de dados?**
 
-## 10. Considerações finais
+As constraints definem regras que os dados precisam respeitar, como o tamanho permitido de um campo. O RLS controla quais operações cada usuário pode realizar, enquanto o `WITH CHECK` verifica se os dados enviados atendem às condições estabelecidas para a operação.
 
-A realização desta atividade permitiu compreender melhor como funciona a autenticação em uma aplicação React integrada ao Supabase.
+## 12. Dificuldades encontradas
 
-Durante o desenvolvimento, foram utilizados conceitos como React Router, Context API, useState, useEffect e Supabase Auth.
+Durante o desenvolvimento, algumas dificuldades estiveram relacionadas à configuração do Supabase, integração entre as ferramentas utilizadas e identificação de erros nos formulários e nas operações com o banco de dados.
 
-Também foi possível aprender a criar contas, realizar login e logout, manter a sessão do usuário e proteger páginas que exigem autenticação.
+Também foi necessário compreender como as validações do front-end se relacionam com as regras de segurança do banco de dados.
 
-Com isso, consegui compreender melhor como esses recursos trabalham juntos para desenvolver uma aplicação mais organizada e segura.
+Essas situações contribuíram para melhorar o entendimento sobre a integração entre React, React Hook Form, Zod e Supabase.
+
+## 13. Fontes de consulta
+
+- [Documentação oficial do React](https://react.dev/)
+- [Documentação do React Router](https://reactrouter.com/)
+- [Documentação do React Hook Form](https://react-hook-form.com/)
+- [Documentação do Zod](https://zod.dev/)
+- [Documentação do Supabase](https://supabase.com/docs)
+
+## 14. Considerações finais
+
+O desenvolvimento deste projeto permitiu compreender melhor como criar uma aplicação React integrada ao Supabase, utilizando autenticação, gerenciamento de sessão, proteção de rotas e operações com banco de dados.
+
+Com a nova atividade, também foi possível aprender a utilizar React Hook Form e Zod para validar formulários, tratar erros e organizar melhor o envio das informações.
+
+Além disso, a implementação de constraints e políticas RLS demonstrou a importância de proteger os dados diretamente no banco de dados.
+
+Dessa forma, o projeto reúne conhecimentos importantes para o desenvolvimento de aplicações web mais organizadas e seguras.
