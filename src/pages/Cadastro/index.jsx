@@ -1,61 +1,64 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { cadastroSchema } from '../../schemas/authSchema';
 import { supabase } from '../../services/supabase';
 import './Cadastro.css';
 
 function Cadastro() {
-  const [nome, setNome] = useState('');
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [confirmarSenha, setConfirmarSenha] = useState('');
-
-  const [loading, setLoading] = useState(false);
-  const [erro, setErro] = useState('');
   const [sucesso, setSucesso] = useState('');
 
-  async function handleCadastro(event) {
-    event.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    clearErrors,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(cadastroSchema),
+    defaultValues: {
+      nome: '',
+      email: '',
+      senha: '',
+      confirmarSenha: '',
+    },
+  });
 
-    setErro('');
+  async function handleCadastro(dados) {
     setSucesso('');
-
-    if (!nome.trim() || !email.trim() || !senha || !confirmarSenha) {
-      setErro('Preencha todos os campos.');
-      return;
-    }
-
-    const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailValido.test(email)) {
-      setErro('Digite um e-mail válido.');
-      return;
-    }
-
-    if (senha.length < 8) {
-      setErro('A senha precisa ter pelo menos 8 caracteres.');
-      return;
-    }
-
-    if (senha !== confirmarSenha) {
-      setErro('As senhas não correspondem.');
-      return;
-    }
-
-    setLoading(true);
+    clearErrors();
 
     try {
       const { data, error } = await supabase.auth.signUp({
-        email: email.trim(),
-        password: senha,
+        email: dados.email.trim(),
+        password: dados.senha,
         options: {
           data: {
-            nome: nome.trim(),
+            nome: dados.nome.trim(),
           },
         },
       });
 
       if (error) {
-        setErro(error.message);
+        const mensagem = error.message.toLowerCase();
+
+        if (
+          mensagem.includes('already registered') ||
+          mensagem.includes('already been registered') ||
+          mensagem.includes('already exists')
+        ) {
+          setError('email', {
+            type: 'server',
+            message: 'Este e-mail já está cadastrado.',
+          });
+          return;
+        }
+
+        setError('root.server', {
+          type: 'server',
+          message: 'Não foi possível realizar o cadastro. Tente novamente.',
+        });
         return;
       }
 
@@ -68,15 +71,11 @@ function Cadastro() {
           'Cadastro realizado! Verifique seu e-mail para confirmar sua conta antes de fazer login.'
         );
       }
-
-      setNome('');
-      setEmail('');
-      setSenha('');
-      setConfirmarSenha('');
-    } catch (error) {
-      setErro('Ocorreu um erro ao realizar o cadastro.');
-    } finally {
-      setLoading(false);
+    } catch {
+      setError('root.server', {
+        type: 'server',
+        message: 'Ocorreu um erro inesperado. Tente novamente.',
+      });
     }
   }
 
@@ -89,51 +88,62 @@ function Cadastro() {
           Preencha os dados abaixo para se cadastrar.
         </p>
 
-        <form onSubmit={handleCadastro}>
+        <form onSubmit={handleSubmit(handleCadastro)}>
           <label htmlFor="nome">Nome completo</label>
           <input
             id="nome"
             type="text"
             placeholder="Digite seu nome completo"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-            required
+            {...register('nome')}
           />
+          {errors.nome && (
+            <p className="registro-erro" role="alert">
+              {errors.nome.message}
+            </p>
+          )}
 
           <label htmlFor="email">E-mail</label>
           <input
             id="email"
             type="email"
             placeholder="Digite seu e-mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+            {...register('email')}
           />
+          {errors.email && (
+            <p className="registro-erro" role="alert">
+              {errors.email.message}
+            </p>
+          )}
 
           <label htmlFor="senha">Senha</label>
           <input
             id="senha"
             type="password"
             placeholder="Mínimo de 8 caracteres"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            minLength={8}
-            required
+            {...register('senha')}
           />
+          {errors.senha && (
+            <p className="registro-erro" role="alert">
+              {errors.senha.message}
+            </p>
+          )}
 
           <label htmlFor="confirmarSenha">Confirmar senha</label>
           <input
             id="confirmarSenha"
             type="password"
             placeholder="Digite a senha novamente"
-            value={confirmarSenha}
-            onChange={(e) => setConfirmarSenha(e.target.value)}
-            required
+            {...register('confirmarSenha')}
           />
-
-          {erro && (
+          {errors.confirmarSenha && (
             <p className="registro-erro" role="alert">
-              {erro}
+              {errors.confirmarSenha.message}
+            </p>
+          )}
+
+          {errors.root?.server && (
+            <p className="registro-erro" role="alert">
+              {errors.root.server.message}
             </p>
           )}
 
@@ -143,8 +153,8 @@ function Cadastro() {
             </p>
           )}
 
-          <button type="submit" disabled={loading}>
-            {loading ? 'Cadastrando...' : 'Criar conta'}
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Cadastrando...' : 'Criar conta'}
           </button>
         </form>
 

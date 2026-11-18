@@ -5,6 +5,7 @@ import Cadastro from './pages/Cadastro';
 import Login from './pages/Login';
 import Perfil from './pages/Perfil';
 import Detalhes from './pages/Detalhes';
+import NovoRegistro from './pages/NovoRegistro';
 
 import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './hooks/useAuth';
@@ -103,6 +104,15 @@ function App() {
           element={
             <ProtectedRoute>
               <Registro />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/registros/novo"
+          element={
+            <ProtectedRoute>
+              <NovoRegistro />
             </ProtectedRoute>
           }
         />
