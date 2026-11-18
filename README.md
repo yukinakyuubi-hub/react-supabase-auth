@@ -33,12 +33,12 @@ Na atividade de validação de formulários, o projeto foi aprimorado com React 
 - Página de perfil.
 - Consulta de produtos cadastrados.
 - Visualização dos detalhes dos produtos.
-- Cadastro de novos registros.
+- Cadastro de novos produtos.
 - Validação de formulários com React Hook Form.
 - Validação de dados com Zod.
 - Mensagens de erro em português.
 - Tratamento de erros retornados pelo Supabase.
-- Desativação do botão durante o envio dos formulários.
+- Desativação dos botões durante o envio dos formulários.
 - Página 404.
 - Controle de acesso com Row Level Security (RLS).
 
@@ -76,11 +76,13 @@ Também são tratados erros retornados pelo Supabase, como credenciais inválida
 
 ## 5. Cadastro de novos registros
 
-Foi adicionada a rota protegida `/registros/novo`, permitindo cadastrar novos registros na tabela `Produtos` do Supabase.
+Foi adicionada a rota protegida `/registros/novo`, permitindo cadastrar novos produtos na tabela `Produtos` do Supabase.
 
 O formulário utiliza validação com Zod antes de enviar os dados ao banco.
 
 Durante o envio, o botão fica desabilitado para evitar múltiplos envios. Após o cadastro, o sistema apresenta uma mensagem de sucesso ou erro e realiza o redirecionamento para a listagem de registros quando o cadastro é concluído.
+
+Também foi adicionada a coluna `user_id` à tabela `Produtos`, permitindo associar os registros ao usuário responsável pelo cadastro.
 
 ## 6. Segurança do banco de dados
 
@@ -88,17 +90,17 @@ A segurança dos dados é reforçada por meio de validações no banco de dados 
 
 ### Constraint CHECK
 
-Foi utilizada uma restrição `CHECK` na tabela `Produtos` para limitar o tamanho do nome do registro.
+Foi criada uma restrição `CHECK` na tabela `Produtos` para limitar o tamanho do nome do produto entre 3 e 100 caracteres.
 
-Essa validação funciona diretamente no banco de dados, impedindo que dados fora das regras estabelecidas sejam inseridos mesmo quando não passam pelo formulário da aplicação.
+Essa validação funciona diretamente no banco de dados, impedindo que nomes fora das regras estabelecidas sejam inseridos, mesmo quando a tentativa não passa pelo formulário da aplicação.
 
 ### Política RLS
 
-A tabela utiliza Row Level Security para controlar as operações realizadas pelos usuários autenticados.
+Foi criada uma política de inserção na tabela `Produtos`, utilizando `WITH CHECK` para verificar se o `user_id` do registro corresponde ao usuário autenticado por meio de `auth.uid()`.
 
-A política de inserção utiliza `WITH CHECK` para verificar se o registro está associado ao usuário autenticado, por meio da identificação retornada por `auth.uid()`.
+Dessa forma, a política impede que um usuário cadastre produtos associados ao identificador de outra pessoa.
 
-Dessa forma, a segurança não depende apenas das validações realizadas no React.
+A segurança não depende apenas das validações realizadas no React.
 
 ## 7. Rotas do sistema
 
@@ -109,7 +111,7 @@ Dessa forma, a segurança não depende apenas das validações realizadas no Rea
 | `/registro` | Cadastro de usuários | Público |
 | `/dashboard` | Painel do usuário | Protegido |
 | `/registros` | Lista de produtos | Protegido |
-| `/registros/novo` | Cadastro de novo registro | Protegido |
+| `/registros/novo` | Cadastro de novo produto | Protegido |
 | `/registros/:id` | Detalhes do produto | Protegido |
 | `/perfil` | Perfil do usuário | Protegido |
 
@@ -162,15 +164,51 @@ npm run dev
 
 ## 10. Teste da validação diretamente no banco de dados — Etapa 5
 
-Nesta etapa, foi realizado um teste para verificar se as regras de segurança do banco de dados continuam funcionando mesmo quando uma tentativa de inserção é feita sem utilizar o formulário da aplicação.
+Nesta etapa, foram realizados testes para verificar se as regras de validação e segurança do banco de dados funcionam mesmo quando as tentativas de inserção são feitas sem utilizar o formulário da aplicação.
 
-O objetivo foi verificar se a constraint `CHECK` e a política RLS impedem a inserção de dados inválidos ou não autorizados.
+### Teste da constraint CHECK
 
-**Resultado do teste:**
+Foi realizada uma tentativa de inserir um produto diretamente pelo SQL Editor do Supabase, utilizando um nome com apenas um caractere.
 
-[REGISTRAR AQUI O RESULTADO REAL OBTIDO NO SUPABASE: se a inserção foi bloqueada, qual regra impediu a operação e qual mensagem ou erro foi apresentado.]
+Comando utilizado:
 
-Esse teste demonstra a importância de realizar validações também no banco de dados, pois a validação no front-end, sozinha, não garante a segurança das informações.
+```sql
+INSERT INTO public."Produtos" (nome)
+VALUES ('A');
+```
+
+**Resultado obtido:**
+
+```text
+violates check constraint
+"produtos_nome_tamanho_check"
+```
+
+O banco de dados bloqueou a inserção porque o nome informado não respeitava a regra de tamanho entre 3 e 100 caracteres.
+
+Esse resultado comprovou que a constraint `CHECK` está funcionando corretamente.
+
+### Teste da política RLS
+
+Também foi realizado um teste simulando um usuário autenticado que tentou inserir um produto utilizando um `user_id` diferente do seu próprio identificador.
+
+**Resultado obtido:**
+
+```text
+ERRO: 42501: a nova linha viola a política de segurança em nível de linha para a tabela "Produtos"
+```
+
+O Supabase bloqueou a operação porque o identificador informado não correspondia ao usuário autenticado.
+
+O teste foi realizado utilizando uma transação com `ROLLBACK`, garantindo que nenhum produto de teste fosse mantido no banco de dados.
+
+Esse resultado comprovou que a política RLS com `WITH CHECK` está funcionando corretamente.
+
+### Conclusão dos testes
+
+Os dois testes demonstraram que o banco de dados consegue bloquear tanto dados que não respeitam as regras de validação quanto operações que não atendem às políticas de segurança.
+
+Isso demonstra a importância de realizar validações também no banco de dados, pois a validação no front-end, sozinha, não garante a segurança das informações.
 
 ## 11. Perguntas e respostas
 
@@ -200,9 +238,9 @@ As constraints definem regras que os dados precisam respeitar, como o tamanho pe
 
 ## 12. Dificuldades encontradas
 
-Durante o desenvolvimento, algumas dificuldades estiveram relacionadas à configuração do Supabase, integração entre as ferramentas utilizadas e identificação de erros nos formulários e nas operações com o banco de dados.
+Durante o desenvolvimento, algumas dificuldades estiveram relacionadas à configuração do Supabase, à integração entre as ferramentas utilizadas e à identificação de erros nos formulários e nas operações com o banco de dados.
 
-Também foi necessário compreender como as validações do front-end se relacionam com as regras de segurança do banco de dados.
+Também foi necessário corrigir configurações da tabela, adicionar a coluna `user_id` e compreender como as validações do front-end se relacionam com as regras de segurança do banco de dados.
 
 Essas situações contribuíram para melhorar o entendimento sobre a integração entre React, React Hook Form, Zod e Supabase.
 
