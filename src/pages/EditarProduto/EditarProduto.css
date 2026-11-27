@@ -1,0 +1,191 @@
+
+.editar-container {
+    width: 100%;
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 45px 25px 60px;
+  }
+  
+  .editar-header {
+    margin-bottom: 30px;
+  }
+  
+  .editar-header h1 {
+    margin: 5px 0 10px;
+    color: #163d32;
+    font-size: 32px;
+  }
+  
+  .editar-header p {
+    color: #718078;
+    font-size: 14px;
+  }
+  
+  .editar-card {
+    overflow: hidden;
+    border: 1px solid #e0eae2;
+    border-radius: 17px;
+    background: white;
+    box-shadow: 0 6px 22px rgba(22, 61, 50, 0.06);
+  }
+  
+  .editar-card-header {
+    padding: 25px 30px;
+    border-bottom: 1px solid #e5eee7;
+    background: #eaf4ec;
+  }
+  
+  .editar-card-header h2 {
+    margin-bottom: 7px;
+    color: #163d32;
+    font-size: 19px;
+  }
+  
+  .editar-card-header p {
+    color: #718078;
+    font-size: 13px;
+  }
+  
+  .editar-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    padding: 30px;
+  }
+  
+  .editar-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    min-width: 0;
+  }
+  
+  .editar-form-group label {
+    color: #244b3c;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  
+  .editar-form-group input,
+  .editar-form-group textarea {
+    width: 100%;
+    padding: 14px 15px;
+    border: 1px solid #dce7de;
+    border-radius: 9px;
+    outline: none;
+    background: #f8faf8;
+    color: #263b31;
+    font-family: inherit;
+    font-size: 13px;
+  }
+  
+  .editar-form-group input:focus,
+  .editar-form-group textarea:focus {
+    border-color: #65a982;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(101, 169, 130, 0.12);
+  }
+  
+  .editar-form-group textarea {
+    min-height: 110px;
+    resize: vertical;
+  }
+  
+  .editar-form-group small {
+    color: #b54747;
+    font-size: 12px;
+  }
+  
+  .editar-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  
+  .editar-alerta {
+    padding: 14px 16px;
+    border-radius: 9px;
+    font-size: 13px;
+  }
+  
+  .editar-alerta.erro {
+    background: #fff1f1;
+    color: #a53636;
+  }
+  
+  .editar-alerta.sucesso {
+    background: #e8f6ec;
+    color: #246b50;
+  }
+  
+  .editar-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 20px;
+    border-top: 1px solid #e9efea;
+  }
+  
+  .editar-cancelar,
+  .editar-salvar {
+    min-width: 150px;
+    padding: 13px 20px;
+    border-radius: 9px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  .editar-cancelar {
+    border: 1px solid #dce7de;
+    background: white;
+    color: #526e5e;
+  }
+  
+  .editar-salvar {
+    border: none;
+    background: #246b50;
+    color: white;
+  }
+  
+  .editar-salvar:hover:not(:disabled) {
+    background: #163d32;
+  }
+  
+  .editar-salvar:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+  
+  @media (max-width: 650px) {
+    .editar-container {
+      padding: 30px 18px 40px;
+    }
+  
+    .editar-header h1 {
+      font-size: 26px;
+    }
+  
+    .editar-card-header,
+    .editar-form {
+      padding: 22px;
+    }
+  
+    .editar-form-row {
+      grid-template-columns: 1fr;
+    }
+  
+    .editar-footer {
+      flex-direction: column-reverse;
+    }
+  
+    .editar-cancelar,
+    .editar-salvar {
+      width: 100%;
+    }
+  }
+  

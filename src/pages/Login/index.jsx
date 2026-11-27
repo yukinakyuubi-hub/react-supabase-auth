@@ -10,6 +10,7 @@ import './Login.css';
 function Login() {
   const [sucesso, setSucesso] = useState('');
   const [reenviando, setReenviando] = useState(false);
+  const [mostrarSenha, setMostrarSenha] = useState(false);
 
   const navigate = useNavigate();
 
@@ -44,7 +45,8 @@ function Login() {
         if (mensagem.includes('email not confirmed')) {
           setError('root.emailNotConfirmed', {
             type: 'server',
-            message: 'Seu e-mail ainda não foi confirmado. Verifique sua caixa de entrada.',
+            message:
+              'Seu e-mail ainda não foi confirmado. Verifique sua caixa de entrada.',
           });
           return;
         }
@@ -55,7 +57,8 @@ function Login() {
         ) {
           setError('root.server', {
             type: 'server',
-            message: 'E-mail ou senha incorretos. Verifique seus dados e tente novamente.',
+            message:
+              'E-mail ou senha incorretos. Verifique seus dados e tente novamente.',
           });
           return;
         }
@@ -121,74 +124,117 @@ function Login() {
 
   return (
     <main className="login-container">
-      <form className="login-card" onSubmit={handleSubmit(entrar)}>
-        <h1>Bem-vindo de volta!</h1>
-        <p>Entre na sua conta para continuar.</p>
+      <section className="login-card">
 
-        <label htmlFor="email">E-mail</label>
-        <input
-          id="email"
-          type="email"
-          placeholder="Digite seu e-mail"
-          {...register('email')}
-        />
-        {errors.email && (
-          <p className="login-erro" role="alert">
-            {errors.email.message}
-          </p>
-        )}
+        <div className="login-icon">G</div>
 
-        <label htmlFor="senha">Senha</label>
-        <input
-          id="senha"
-          type="password"
-          placeholder="Digite sua senha"
-          {...register('senha')}
-        />
-        {errors.senha && (
-          <p className="login-erro" role="alert">
-            {errors.senha.message}
-          </p>
-        )}
+        <span className="login-tag">BEM-VINDO DE VOLTA</span>
 
-        {errors.root?.server && (
-          <p className="login-erro" role="alert">
-            {errors.root.server.message}
-          </p>
-        )}
+        <h1>Olá novamente!</h1>
 
-        {errors.root?.emailNotConfirmed && (
-          <>
-            <p className="login-erro" role="alert">
-              {errors.root.emailNotConfirmed.message}
-            </p>
-
-            <button
-              type="button"
-              onClick={reenviarConfirmacao}
-              disabled={reenviando || isSubmitting}
-            >
-              {reenviando
-                ? 'Enviando...'
-                : 'Reenviar e-mail de confirmação'}
-            </button>
-          </>
-        )}
-
-        {sucesso && (
-          <p className="login-sucesso" role="status">
-            {sucesso}
-          </p>
-        )}
-
-        <button type="submit" disabled={isSubmitting || reenviando}>
-          {isSubmitting ? 'Entrando...' : 'Entrar'}
-        </button>
-
-        <p>
-          Ainda não tem conta? <Link to="/registro">Cadastre-se</Link>
+        <p className="login-description">
+          Entre na sua conta para continuar.
         </p>
-      </form>
+
+        <form onSubmit={handleSubmit(entrar)}>
+
+          <div className="login-field">
+            <label htmlFor="email">E-mail</label>
+
+            <input
+              id="email"
+              type="email"
+              placeholder="seuemail@exemplo.com"
+              autoComplete="email"
+              {...register('email')}
+            />
+
+            {errors.email && (
+              <p className="login-erro" role="alert">
+                {errors.email.message}
+              </p>
+            )}
+          </div>
+
+          <div className="login-field">
+            <label htmlFor="senha">Senha</label>
+
+            <div className="senha-wrapper">
+              <input
+                id="senha"
+                type={mostrarSenha ? 'text' : 'password'}
+                placeholder="Digite sua senha"
+                autoComplete="current-password"
+                {...register('senha')}
+              />
+
+              <button
+                type="button"
+                className="senha-toggle"
+                onClick={() => setMostrarSenha(!mostrarSenha)}
+                aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
+              >
+                {mostrarSenha ? 'Ocultar' : 'Mostrar'}
+              </button>
+            </div>
+
+            {errors.senha && (
+              <p className="login-erro" role="alert">
+                {errors.senha.message}
+              </p>
+            )}
+          </div>
+
+          {errors.root?.server && (
+            <p className="login-erro login-feedback" role="alert">
+              {errors.root.server.message}
+            </p>
+          )}
+
+          {errors.root?.emailNotConfirmed && (
+            <div className="login-feedback">
+              <p className="login-erro" role="alert">
+                {errors.root.emailNotConfirmed.message}
+              </p>
+
+              <button
+                type="button"
+                className="btn-reenviar"
+                onClick={reenviarConfirmacao}
+                disabled={reenviando || isSubmitting}
+              >
+                {reenviando
+                  ? 'Enviando...'
+                  : 'Reenviar e-mail de confirmação'}
+              </button>
+            </div>
+          )}
+
+          {sucesso && (
+            <p className="login-sucesso" role="status">
+              {sucesso}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            className="login-button"
+            disabled={isSubmitting || reenviando}
+          >
+            {isSubmitting ? 'Entrando...' : 'Entrar na minha conta'}
+          </button>
+
+        </form>
+
+        <div className="login-footer">
+          <p>
+            Ainda não tem uma conta?
+            {' '}
+            <Link to="/registro">Cadastre-se</Link>
+          </p>
+        </div>
+
+      </section>
     </main>
   );
 }
