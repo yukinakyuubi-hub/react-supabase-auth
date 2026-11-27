@@ -1,35 +1,222 @@
-import { Routes, Route, Link } from 'react-router';
-import Cadastro from './pages/Cadastro';
-import Cadastro from './pages/Cadastro';
-
-function Home() {
-  return (
-    <main>
-      <h1>Bem-vindo ao nosso sistema!</h1>
-      <p>Consulte os produtos cadastrados no banco de dados.</p>
-      <Link to="/registros">Ver produtos cadastrados</Link>
-    </main>
-  );
+/* Tela principal */
+.registro-container {
+  min-height: calc(100vh - 82px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  background: #E2EAE4;
 }
 
-function App() {
-  return (
-    <>
-      <nav>
-        <Link to="/">Início</Link>
-        {' | '}
-        <Link to="/registros">Produtos</Link>
-        {' | '}
-        <Link to="/registro">Criar conta</Link>
-      </nav>
-
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/registros" element={<Registros />} />
-        <Route path="/registro" element={<Registro />} />
-      </Routes>
-    </>
-  );
+/* Cartão de cadastro */
+.registro-card {
+  width: 100%;
+  max-width: 480px;
+  padding: 40px;
+  background: #FFFFFF;
+  border: 1px solid #D5E1D8;
+  border-radius: 22px;
+  box-shadow: 0 12px 35px rgba(21, 61, 50, 0.08);
 }
 
-export default App;
+/* Identidade visual */
+.registro-icon {
+  width: 58px;
+  height: 58px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 20px;
+  border-radius: 17px;
+  background: #36A477;
+  color: #FFFFFF;
+  font-size: 27px;
+  font-weight: 800;
+}
+
+.registro-tag {
+  display: block;
+  margin-bottom: 12px;
+  color: #36A477;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-align: center;
+}
+
+.registro-card h1 {
+  margin: 0;
+  color: #153D32;
+  font-size: 29px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.registro-subtitulo {
+  margin: 10px 0 30px;
+  color: #718078;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Campos do formulário */
+.registro-campo {
+  margin-bottom: 19px;
+}
+
+.registro-campo label {
+  display: block;
+  margin-bottom: 9px;
+  color: #153D32;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.registro-campo input {
+  width: 100%;
+  height: 50px;
+  padding: 0 15px;
+  border: 1px solid #D5E1D8;
+  border-radius: 10px;
+  outline: none;
+  background: #F8FAF8;
+  color: #263B31;
+  font-size: 14px;
+  transition: 0.3s ease;
+}
+
+.registro-campo input::placeholder {
+  color: #A0ADA4;
+}
+
+.registro-campo input:focus {
+  border-color: #36A477;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(54, 164, 119, 0.13);
+}
+
+/* Mostrar e ocultar senha */
+.registro-senha-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.registro-senha-wrapper input {
+  padding-right: 85px;
+}
+
+.registro-senha-toggle {
+  position: absolute;
+  right: 12px;
+  padding: 5px;
+  border: none;
+  background: transparent;
+  color: #36A477;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.registro-senha-toggle:hover {
+  color: #153D32;
+}
+
+/* Mensagens de erro */
+.registro-erro {
+  margin: 7px 0 0;
+  color: #C03939;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.registro-feedback {
+  margin-bottom: 15px;
+  padding: 12px;
+  border-radius: 9px;
+  background: #FFF0F0;
+  border: 1px solid #F2D5D5;
+}
+
+/* Mensagem de sucesso */
+.registro-sucesso {
+  margin: 15px 0;
+  padding: 13px;
+  border: 1px solid #D5E1D8;
+  border-radius: 9px;
+  background: #E2EAE4;
+  color: #153D32;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Botão de cadastro */
+.registro-button {
+  width: 100%;
+  min-height: 51px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 10px;
+  background: #36A477;
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.registro-button:hover:not(:disabled) {
+  background: #153D32;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(21, 61, 50, 0.17);
+}
+
+.registro-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.registro-button:focus-visible,
+.registro-senha-toggle:focus-visible {
+  outline: 3px solid #36A477;
+  outline-offset: 3px;
+}
+
+/* Link para login */
+.registro-login {
+  margin: 25px 0 0;
+  padding-top: 22px;
+  border-top: 1px solid #E5ECE7;
+  color: #718078;
+  font-size: 13px;
+  text-align: center;
+}
+
+.registro-login a {
+  color: #36A477;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.registro-login a:hover {
+  color: #153D32;
+  text-decoration: underline;
+}
+
+/* Responsividade */
+@media (max-width: 520px) {
+  .registro-container {
+    padding: 25px 15px;
+  }
+
+  .registro-card {
+    padding: 30px 22px;
+    border-radius: 18px;
+  }
+
+  .registro-card h1 {
+    font-size: 25px;
+  }
+}

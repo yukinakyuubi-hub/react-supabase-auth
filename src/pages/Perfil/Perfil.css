@@ -1,0 +1,171 @@
+
+.perfil-container {
+    min-height: calc(100vh - 76px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    background: #f5f8f5;
+  }
+  
+  .perfil-card {
+    width: 100%;
+    max-width: 550px;
+    padding: 38px;
+    background: #ffffff;
+    border: 1px solid #e5eee7;
+    border-radius: 20px;
+    box-shadow: 0 12px 35px rgba(22, 61, 50, 0.08);
+    text-align: center;
+  }
+  
+  .perfil-cabecalho {
+    margin-bottom: 25px;
+  }
+  
+  .perfil-tag {
+    color: #65a982;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+  }
+  
+  .perfil-cabecalho h1 {
+    margin: 10px 0 7px;
+    color: #163d32;
+    font-size: 28px;
+  }
+  
+  .perfil-cabecalho p {
+    margin: 0;
+    color: #718078;
+    font-size: 14px;
+  }
+  
+  .perfil-avatar {
+    width: 90px;
+    height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 15px;
+    border: 5px solid #dcefe3;
+    border-radius: 50%;
+    background: #246b50;
+    color: #ffffff;
+    font-size: 35px;
+    font-weight: 700;
+  }
+  
+  .perfil-nome {
+    margin: 0;
+    color: #163d32;
+    font-size: 22px;
+  }
+  
+  .perfil-email {
+    margin: 7px 0 25px;
+    color: #829087;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+  }
+  
+  .perfil-divider {
+    width: 100%;
+    height: 1px;
+    margin-bottom: 25px;
+    background: #e8eee9;
+  }
+  
+  .perfil-informacoes {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    text-align: left;
+  }
+  
+  .perfil-informacao {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 15px;
+    border: 1px solid #e5eee7;
+    border-radius: 12px;
+    background: #fbfdfb;
+  }
+  
+  .perfil-icone {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 11px;
+    background: #dcefe3;
+    color: #246b50;
+    font-size: 19px;
+    font-weight: 700;
+  }
+  
+  .perfil-informacao div {
+    min-width: 0;
+  }
+  
+  .perfil-label {
+    display: block;
+    margin-bottom: 5px;
+    color: #829087;
+    font-size: 11px;
+  }
+  
+  .perfil-informacao strong {
+    display: block;
+    color: #244b3c;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+  
+  .perfil-id {
+    font-size: 11px !important;
+  }
+  
+  .perfil-sair {
+    width: 100%;
+    height: 48px;
+    margin-top: 25px;
+    border: none;
+    border-radius: 10px;
+    background: #246b50;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+  
+  .perfil-sair:hover {
+    background: #163d32;
+    transform: translateY(-1px);
+  }
+  
+  .perfil-rodape {
+    margin: 17px 0 0;
+    color: #829087;
+    font-size: 12px;
+  }
+  
+  @media (max-width: 520px) {
+    .perfil-container {
+      padding: 25px 15px;
+    }
+  
+    .perfil-card {
+      padding: 28px 20px;
+    }
+  
+    .perfil-cabecalho h1 {
+      font-size: 24px;
+    }
+  }
+   

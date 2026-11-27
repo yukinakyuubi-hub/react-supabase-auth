@@ -1,78 +1,97 @@
-import { Routes, Route, Link, useNavigate } from 'react-router';
+
+import './App.css';
+
+import { Routes, Route, Link } from 'react-router';
 
 import Registro from './pages/Registros';
 import Cadastro from './pages/Cadastro';
 import Login from './pages/Login';
 import Perfil from './pages/Perfil';
+import Dashboard from './pages/Dashboard';
 import Detalhes from './pages/Detalhes';
 import NovoRegistro from './pages/NovoRegistro';
+import EditarProduto from './pages/EditarProduto';
 
 import ProtectedRoute from './components/ProtectedRoute';
-import { useAuth } from './hooks/useAuth';
+import Header from './components/Header';
 
 function Home() {
   return (
-    <main>
-      <h1>Bem-vindo ao nosso sistema!</h1>
-      <p>Consulte os produtos cadastrados no banco de dados.</p>
-      <Link to="/registros">Ver produtos cadastrados</Link>
-    </main>
-  );
-}
+    <main className="home">
+      <section className="hero">
+        <span className="hero-tag">
+          BEM-VINDO AO GESTTA
+        </span>
 
-function Dashboard() {
-  const { user, signOut } = useAuth();
-  const navigate = useNavigate();
+        <h1>
+          Organize seus produtos
+          <br />
+          de forma simples.
+        </h1>
 
-  async function sair() {
-    try {
-      await signOut();
-      navigate('/login');
-    } catch (error) {
-      alert('Erro ao sair da conta: ' + error.message);
-    }
-  }
+        <p>
+          Gerencie seus produtos, consulte informações
+          e acompanhe seus registros em um só lugar.
+          Tudo isso com praticidade e organização.
+        </p>
 
-  return (
-    <main>
-      <h1>Dashboard</h1>
-      <p>Você está autenticado!</p>
+        <Link to="/registros" className="btn-primary">
+          Ver produtos cadastrados
+        </Link>
+      </section>
 
-      <h2>Dados da sua conta</h2>
-      <p>E-mail: {user?.email}</p>
-      <p>ID do usuário: {user?.id}</p>
+      <section className="features">
+        <article className="feature-card">
+          <div className="feature-icon">01</div>
+          <h2>Produtos</h2>
+          <p>
+            Consulte e gerencie seus produtos
+            de maneira simples e organizada.
+          </p>
+        </article>
 
-      <button onClick={sair}>Sair da conta</button>
+        <article className="feature-card">
+          <div className="feature-icon">02</div>
+          <h2>Organização</h2>
+          <p>
+            Mantenha seus registros organizados
+            e acessíveis sempre que precisar.
+          </p>
+        </article>
+
+        <article className="feature-card">
+          <div className="feature-icon">03</div>
+          <h2>Segurança</h2>
+          <p>
+            Tenha acesso aos seus dados com
+            autenticação de usuários.
+          </p>
+        </article>
+      </section>
     </main>
   );
 }
 
 function NaoEncontrado() {
   return (
-    <main>
-      <h1>404 - Página não encontrada</h1>
-      <p>Desculpe, a página que você procura não existe.</p>
-      <Link to="/">Voltar para o início</Link>
+    <main className="page-container not-found">
+      <h1>404</h1>
+      <h2>Página não encontrada</h2>
+      <p>
+        Desculpe, a página que você procura não existe.
+      </p>
+
+      <Link to="/" className="btn-primary">
+        Voltar para o início
+      </Link>
     </main>
   );
 }
 
 function App() {
   return (
-    <>
-      <nav>
-        <Link to="/">Início</Link>
-        {' | '}
-        <Link to="/registros">Produtos</Link>
-        {' | '}
-        <Link to="/registro">Criar conta</Link>
-        {' | '}
-        <Link to="/login">Entrar</Link>
-        {' | '}
-        <Link to="/dashboard">Dashboard</Link>
-        {' | '}
-        <Link to="/perfil">Meu Perfil</Link>
-      </nav>
+    <div className="app">
+      <Header />
 
       <Routes>
         <Route path="/" element={<Home />} />
@@ -126,9 +145,18 @@ function App() {
           }
         />
 
+        <Route
+          path="/registros/:id/editar"
+          element={
+            <ProtectedRoute>
+              <EditarProduto />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="*" element={<NaoEncontrado />} />
       </Routes>
-    </>
+    </div>
   );
 }
 

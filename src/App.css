@@ -1,184 +1,213 @@
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
 
-  &:hover {
-    border-color: var(--accent-border);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
+/* ========================================
+   GESTTA - ESTILOS DA PÁGINA INICIAL
+   Técnica de cores 60-30-10
+======================================== */
+
+/* Página inicial */
+.home {
+  width: 100%;
+  min-height: calc(100vh - 82px);
+  padding: 65px 7%;
 }
 
+/* Área principal de apresentação */
 .hero {
-  position: relative;
-
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
-
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 75px 65px;
+  background: #FFFFFF;
+  border: 1px solid #D5E1D8;
+  border-radius: 24px;
+  box-shadow: 0 8px 30px rgba(21, 61, 50, 0.06);
+  text-align: center;
 }
 
-#center {
+.hero-tag {
+  display: inline-block;
+  padding: 9px 16px;
+  margin-bottom: 24px;
+  background: #E2EAE4;
+  color: #153D32;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.hero h1 {
+  max-width: 720px;
+  margin: 0 auto 22px;
+  color: #153D32;
+  font-size: clamp(36px, 5vw, 58px);
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -1.8px;
+}
+
+.hero p {
+  max-width: 650px;
+  margin: 0 auto 32px;
+  color: #718078;
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+/* Botão principal */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 25px;
+  background: #36A477;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: #153D32;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(21, 61, 50, 0.18);
+}
+
+.btn-primary:focus-visible {
+  outline: 3px solid #153D32;
+  outline-offset: 4px;
+}
+
+/* Cards de funcionalidades */
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 1120px;
+  margin: 35px auto 0;
+}
+
+.feature-card {
+  padding: 30px;
+  background: #FFFFFF;
+  border: 1px solid #D5E1D8;
+  border-radius: 18px;
+  box-shadow: 0 4px 15px rgba(21, 61, 50, 0.04);
+  transition: 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  border-color: #36A477;
+  box-shadow: 0 10px 25px rgba(21, 61, 50, 0.09);
+}
+
+.feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  margin-bottom: 20px;
+  background: #E2EAE4;
+  color: #153D32;
+  border-radius: 14px;
+  font-size: 23px;
+}
+
+.feature-card h2 {
+  margin-bottom: 12px;
+  color: #153D32;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.feature-card p {
+  color: #718078;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* Área de páginas internas */
+.page-container {
+  width: 100%;
+  max-width: 1120px;
+  min-height: 70vh;
+  margin: 0 auto;
+  padding: 45px 25px;
+}
+
+/* Página não encontrada */
+.not-found {
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  text-align: center;
+}
 
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
+.not-found h1 {
+  margin-bottom: 15px;
+  color: #153D32;
+  font-size: 42px;
+}
+
+.not-found h2 {
+  margin-bottom: 12px;
+  color: #153D32;
+}
+
+.not-found p {
+  margin-bottom: 25px;
+  color: #718078;
+}
+
+/* Responsividade */
+@media (max-width: 850px) {
+  .home {
+    padding: 40px 5%;
+  }
+
+  .hero {
+    padding: 50px 35px;
+  }
+
+  .features {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-#next-steps {
-  display: flex;
-  border-top: 1px solid var(--border);
-  text-align: left;
-
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
-    }
+@media (max-width: 600px) {
+  .home {
+    padding: 25px 5%;
   }
 
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
+  .hero {
+    padding: 35px 24px;
+    border-radius: 18px;
   }
 
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-
-#docs {
-  border-right: 1px solid var(--border);
-
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-}
-
-#next-steps ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 8px;
-  margin: 32px 0 0;
-
-  .logo {
-    height: 18px;
+  .hero h1 {
+    font-size: 36px;
+    letter-spacing: -1px;
   }
 
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
-
-    &:hover {
-      box-shadow: var(--shadow);
-    }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
+  .hero p {
+    font-size: 15px;
   }
 
-  @media (max-width: 1024px) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    li {
-      flex: 1 1 calc(50% - 8px);
-    }
-
-    a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
-    }
-  }
-}
-
-#spacer {
-  height: 88px;
-  border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
-  }
-}
-
-.ticks {
-  position: relative;
-  width: 100%;
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
+  .features {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 22px;
   }
 
-  &::before {
-    left: 0;
-    border-left-color: var(--border);
-  }
-  &::after {
-    right: 0;
-    border-right-color: var(--border);
+  .feature-card {
+    padding: 25px;
   }
 }

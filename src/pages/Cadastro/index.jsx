@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { useForm } from 'react-hook-form';
@@ -8,6 +9,8 @@ import './Cadastro.css';
 
 function Cadastro() {
   const [sucesso, setSucesso] = useState('');
+  const [mostrarSenha, setMostrarSenha] = useState(false);
+  const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false);
 
   const {
     register,
@@ -82,67 +85,101 @@ function Cadastro() {
   return (
     <main className="registro-container">
       <section className="registro-card">
+        <div className="registro-icon">G</div>
+
+        <span className="registro-tag">JUNTE-SE A NÓS</span>
+
         <h1>Criar minha conta</h1>
 
         <p className="registro-subtitulo">
-          Preencha os dados abaixo para se cadastrar.
+          Preencha seus dados e comece sua experiência.
         </p>
 
         <form onSubmit={handleSubmit(handleCadastro)}>
-          <label htmlFor="nome">Nome completo</label>
-          <input
-            id="nome"
-            type="text"
-            placeholder="Digite seu nome completo"
-            {...register('nome')}
-          />
-          {errors.nome && (
-            <p className="registro-erro" role="alert">
-              {errors.nome.message}
-            </p>
-          )}
+          <div className="registro-campo">
+            <label htmlFor="nome">Nome completo</label>
+            <input
+              id="nome"
+              type="text"
+              placeholder="Digite seu nome completo"
+              autoComplete="name"
+              {...register('nome')}
+            />
+            {errors.nome && (
+              <p className="registro-erro" role="alert">
+                {errors.nome.message}
+              </p>
+            )}
+          </div>
 
-          <label htmlFor="email">E-mail</label>
-          <input
-            id="email"
-            type="email"
-            placeholder="Digite seu e-mail"
-            {...register('email')}
-          />
-          {errors.email && (
-            <p className="registro-erro" role="alert">
-              {errors.email.message}
-            </p>
-          )}
+          <div className="registro-campo">
+            <label htmlFor="email">E-mail</label>
+            <input
+              id="email"
+              type="email"
+              placeholder="Digite seu e-mail"
+              autoComplete="email"
+              {...register('email')}
+            />
+            {errors.email && (
+              <p className="registro-erro" role="alert">
+                {errors.email.message}
+              </p>
+            )}
+          </div>
 
-          <label htmlFor="senha">Senha</label>
-          <input
-            id="senha"
-            type="password"
-            placeholder="Mínimo de 8 caracteres"
-            {...register('senha')}
-          />
-          {errors.senha && (
-            <p className="registro-erro" role="alert">
-              {errors.senha.message}
-            </p>
-          )}
+          <div className="registro-campo">
+            <label htmlFor="senha">Senha</label>
+            <div className="registro-senha-wrapper">
+              <input
+                id="senha"
+                type={mostrarSenha ? 'text' : 'password'}
+                placeholder="Mínimo de 8 caracteres"
+                autoComplete="new-password"
+                {...register('senha')}
+              />
+              <button
+                type="button"
+                className="registro-senha-toggle"
+                onClick={() => setMostrarSenha(!mostrarSenha)}
+              >
+                {mostrarSenha ? 'Ocultar' : 'Mostrar'}
+              </button>
+            </div>
+            {errors.senha && (
+              <p className="registro-erro" role="alert">
+                {errors.senha.message}
+              </p>
+            )}
+          </div>
 
-          <label htmlFor="confirmarSenha">Confirmar senha</label>
-          <input
-            id="confirmarSenha"
-            type="password"
-            placeholder="Digite a senha novamente"
-            {...register('confirmarSenha')}
-          />
-          {errors.confirmarSenha && (
-            <p className="registro-erro" role="alert">
-              {errors.confirmarSenha.message}
-            </p>
-          )}
+          <div className="registro-campo">
+            <label htmlFor="confirmarSenha">Confirmar senha</label>
+            <div className="registro-senha-wrapper">
+              <input
+                id="confirmarSenha"
+                type={mostrarConfirmacao ? 'text' : 'password'}
+                placeholder="Digite a senha novamente"
+                autoComplete="new-password"
+                {...register('confirmarSenha')}
+              />
+              <button
+                type="button"
+                className="registro-senha-toggle"
+                onClick={() => setMostrarConfirmacao(!mostrarConfirmacao)}
+              >
+                {mostrarConfirmacao ? 'Ocultar' : 'Mostrar'}
+              </button>
+            </div>
+            {errors.confirmarSenha && (
+              <p className="registro-erro" role="alert">
+                {errors.confirmarSenha.message}
+              </p>
+            )}
+          </div>
 
           {errors.root?.server && (
-            <p className="registro-erro" role="alert">
+            <p className="registro-erro registro-feedback" role="alert">
               {errors.root.server.message}
             </p>
           )}
@@ -153,8 +190,12 @@ function Cadastro() {
             </p>
           )}
 
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Cadastrando...' : 'Criar conta'}
+          <button
+            type="submit"
+            className="registro-button"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Cadastrando...' : 'Criar minha conta'}
           </button>
         </form>
 
